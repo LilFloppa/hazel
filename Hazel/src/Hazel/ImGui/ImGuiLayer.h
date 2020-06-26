@@ -31,5 +31,7 @@ namespace Hazel
 
 	private:
 		float m_Time = 0.0;
+
+		std::string clipboard;
 	};
 }

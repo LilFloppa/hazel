@@ -6,6 +6,8 @@
 
 #include <glad/glad.h>
 
+#include "Hazel/Input.h"
+
 namespace Hazel
 {
 	Application* Application::s_Instance = nullptr;
@@ -27,7 +29,6 @@ namespace Hazel
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClose));
-		HZ_CORE_TRACE("{0}", e);
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

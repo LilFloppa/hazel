@@ -9,6 +9,10 @@
 #include "Hazel/LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 
+#include "Hazel/Input.h"
+#include "Hazel/KeyCodes.h"
+#include "Hazel/MouseCodes.h"
+
 // ---Entry Point------------------------------------
 #include "Hazel/EntryPoint.h"
 // --------------------------------------------------

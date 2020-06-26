@@ -2,6 +2,7 @@
 #include "ImGuiLayer.h"
 
 #include "imgui.h"
+#include "examples/imgui_impl_glfw.h"
 #include "Platform/OpenGL/ImGuiOpenGLRenderer.h"
 #include "Hazel/Application.h"
 
