@@ -1,5 +1,7 @@
 #include <Hazel.h>
 
+#include <glm/mat2x2.hpp>
+
 class ExampleLayer : public Hazel::Layer
 {
 public:
@@ -12,6 +14,8 @@ public:
 
 	void OnUpdate() override
 	{
+		glm::mat2x2 m(1);
+		int a = m.length();
 	}
 
 	void OnEvent(Hazel::Event& e) override
