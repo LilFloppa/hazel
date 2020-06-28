@@ -1,6 +1,5 @@
 #include <Hazel.h>
-
-#include <glm/mat2x2.hpp>
+#include "imgui/imgui.h"
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -14,8 +13,13 @@ public:
 
 	void OnUpdate() override
 	{
-		glm::mat2x2 m(1);
-		int a = m.length();
+	}
+
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
 	}
 
 	void OnEvent(Hazel::Event& e) override
@@ -34,7 +38,6 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
-		PushLayer(new Hazel::ImGuiLayer());
 	}
 
 	~Sandbox()

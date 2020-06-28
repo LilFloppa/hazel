@@ -5,10 +5,14 @@
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/LayerStack.h"
 #include "Hazel/Layer.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
+
+#include "Hazel/Renderer/Buffer.h"
+#include "Hazel/Renderer/Shader.h"
 
 namespace Hazel
 {
-	class HAZEL_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -26,8 +30,16 @@ namespace Hazel
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
-		bool m_Running = true;
+		ImGuiLayer* m_ImGuiLayer;
 		LayerStack m_LayerStack;
+		bool m_Running = true;
+
+
+		unsigned int m_VertexArray;
+		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+
 	private:
 		static Application* s_Instance;
 	};
