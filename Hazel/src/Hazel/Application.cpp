@@ -20,57 +20,50 @@ namespace Hazel
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
 
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f, 0.5f, 0.0f
+		float vertices[3 * 7] = {
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f,
 		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
 		BufferLayout layout = {
-			{ ShaderDataType::Float3, "a_Position" }
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color" }
 		};
-		
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexBuffer->SetLayout(layout);
-		uint32_t index = 0;
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.GetComponentCount(), GL_FLOAT, GL_FALSE, layout.GetStride(), (const void*)element.Offset);
-			index++;
-		}
 
 		unsigned int indices[3] = { 0, 1, 2 };
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-
-		glBindVertexArray(0);
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		std::string vertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
-			out vec3 v_Position;
+			layout(location = 1) in vec4 a_Color;
+
+			out vec4 v_Color;
 
 			void main()
 			{
 				gl_Position = vec4(a_Position, 1.0f);
-				v_Position = a_Position;
+				v_Color = a_Color;
 			}
 		)";
 
 		std::string fragmentSrc = R"(
 			#version 330 core
 
-			in vec3 v_Position;
+			in vec4 v_Color;
 			out vec4 Color;
 
 			void main()
 			{
-				Color = vec4(v_Position.x + 0.3, v_Position.y + 0.3, v_Position.z + 0.3, 1.0f);
+				Color = v_Color;
 			}
 		)";
 
@@ -102,7 +95,7 @@ namespace Hazel
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
+			m_VertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
@@ -112,7 +105,6 @@ namespace Hazel
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
-
 
 			m_Window->OnUpdate();
 		}
