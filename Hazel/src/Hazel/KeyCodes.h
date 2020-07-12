@@ -204,7 +204,7 @@ namespace Hazel
 #define HZ_KEY_INSERT          ::Hazel::Key::Insert
 #define HZ_KEY_DELETE          ::Hazel::Key::Delete
 #define HZ_KEY_RIGHT           ::Hazel::Key::Right
-#define HZ_KEY_LEFT            ::Hazel::Key::Left
+#define HZ_KEY_LEFT ::Hazel::Key::Left
 #define HZ_KEY_DOWN            ::Hazel::Key::Down
 #define HZ_KEY_UP              ::Hazel::Key::Up
 #define HZ_KEY_PAGE_UP         ::Hazel::Key::PageUp
