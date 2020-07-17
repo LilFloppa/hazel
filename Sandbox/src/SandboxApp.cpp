@@ -1,11 +1,6 @@
 #include <Hazel.h>
 #include "imgui/imgui.h"
 
-#include <Hazel/Renderer/OrthographicCamera.h>
-#include <Hazel/Renderer/Shader.h>
-#include <Hazel/Renderer/VertexArray.h>
-#include <Hazel/Renderer/Buffer.h>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -118,10 +113,49 @@ public:
 			}
 		)";
 
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+			
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
+				v_TexCoord = a_TexCoord;
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+
+			out vec4 Color;
+			
+			in vec2 v_TexCoord;
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				Color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
 		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
 		m_FlatColorShader.reset(Hazel::Shader::Create(VertexFlatColorSrc, FragmentFlatColorSrc));
-
+		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
 		m_Camera = Hazel::OrthographicCamera(-1.6f, 1.6f, -0.9f, 0.9f);
+
+		
+		m_Texture = Hazel::Texture2D::Create("assets/textures/checkerboard.jpg");
+
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
 	}
 
 	~ExampleLayer() override {}
@@ -189,7 +223,8 @@ public:
 			}
 		}
 
-		Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		m_Texture->Bind();
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		Hazel::Renderer::EndScene();
 	}
@@ -216,8 +251,11 @@ private:
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
 	Hazel::Ref<Hazel::Shader> m_Shader;
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
+	Hazel::Ref<Hazel::Shader> m_TextureShader;
 	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
 	Hazel::Ref<Hazel::IndexBuffer> m_IndexBuffer;
+
+	Hazel::Ref<Hazel::Texture2D> m_Texture;
 
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 
@@ -247,7 +285,6 @@ public:
 
 	}
 };
-
 
 Hazel::Application* Hazel::CreateApplication()
 {
