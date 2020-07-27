@@ -6,9 +6,11 @@
 #include "Hazel/Log.h"
 
 #include "Hazel/Core/Timestep.h"
+
 #include "Hazel/Input.h"
 #include "Hazel/KeyCodes.h"
 #include "Hazel/MouseCodes.h"
+#include "Hazel/OrthographicCameraController.h"
 
 #include "Hazel/ImGui/ImGuiLayer.h"
 
