@@ -14,11 +14,10 @@ void main()
 #type pixel
 #version 330 core
 
-out vec4 Color;
-
-uniform vec3 u_Color;
+layout(location = 0) out vec4 color;
+uniform vec4 u_Color;
 
 void main()
 {
-	Color = vec4(u_Color, 1.0f);
+	color = u_Color;
 }
