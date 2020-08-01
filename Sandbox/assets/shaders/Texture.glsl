@@ -18,12 +18,12 @@ void main()
 #type pixel
 #version 330 core
 
-out vec4 Color;
+out vec4 color;
 
 in vec2 v_TexCoord;
 uniform sampler2D u_Texture;
 
 void main()
 {
-	Color = texture(u_Texture, v_TexCoord);
+	color = texture(u_Texture, v_TexCoord);
 }
