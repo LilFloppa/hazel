@@ -37,15 +37,13 @@ namespace Hazel
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
-		bool IsHandled() { return m_Handled; }
-
 		bool IsInCategory(EventCategory category)
 		{
 			return GetCategoryFlags() & category;
 		}
 
-	private:
-		bool m_Handled = false;
+	public:
+		bool Handled = false;
 	};
 
 	class EventDispatcher
@@ -62,7 +60,7 @@ namespace Hazel
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(static_cast<T&>(m_Event));
+				m_Event.Handled = func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;

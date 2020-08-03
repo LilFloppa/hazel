@@ -44,7 +44,7 @@ namespace Hazel
 
 		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); it++)
 		{
-			if (e.IsHandled())
+			if (e.Handled)
 				break;
 			(*it)->OnEvent(e);
 		}
@@ -100,6 +100,11 @@ namespace Hazel
 
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)
