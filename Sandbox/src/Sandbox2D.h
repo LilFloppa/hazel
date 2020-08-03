@@ -22,7 +22,13 @@ private:
 	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
+	Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
+	Hazel::Ref<Hazel::SubTexture2D> m_Stairs;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	float fps = 0.0f;
+
+	float angle = 0.0f;
+	float length = 1.0f;
+	float thickness = 1.0f;
 };
