@@ -17,6 +17,11 @@ void Sandbox2D::OnAttach()
 	m_SpriteSheet = Hazel::Texture2D::Create("assets/textures/SpriteSheet.png");
 	m_Stairs = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 64, 64 });
 	m_Barrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 64, 64 });
+
+	Hazel::FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_Framebuffer = Hazel::Framebuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -44,6 +49,8 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 	Hazel::Renderer2D::ResetStats();
 	{
 		HZ_PROFILE_SCOPE("Renderer Prep");
+
+		m_Framebuffer->Bind();
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Hazel::RenderCommand::Clear();
 	}
@@ -53,21 +60,23 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		rotation += ts * 50.0f;
 
 		HZ_PROFILE_SCOPE("Renderer Draw");
-		/*Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		Hazel::Renderer2D::DrawQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_Stairs);
 		Hazel::Renderer2D::DrawQuad({ -2.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, m_Barrel);
 		Hazel::Renderer2D::EndScene();
 
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		for (float y = -100.0f; y < 100.0f; y += 0.5f)
+		for (float y = -10.0f; y < 10.0f; y += 0.5f)
 		{
-			for (float x = -100.0f; x < 100.0f; x += 0.5f)
+			for (float x = -10.0f; x < 10.0f; x += 0.5f)
 			{
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 1.0f };
 				Hazel::Renderer2D::DrawQuad({ x, y, -0.1f }, { 0.45f, 0.45f }, color);
 			}
 		}
-		Hazel::Renderer2D::EndScene();*/
+		Hazel::Renderer2D::EndScene();
+
+		m_Framebuffer->Unbind();
 	}
 }
 
@@ -147,8 +156,8 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 	ImGui::Text("FPS: %f", fps);
 
-	uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-	ImGui::Image((void*)textureID, ImVec2{ 256.0f, 256.0f });
+	uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f });
 	ImGui::End();
 
     ImGui::End();

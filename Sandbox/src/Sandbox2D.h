@@ -25,6 +25,8 @@ private:
 	Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
 	Hazel::Ref<Hazel::SubTexture2D> m_Stairs, m_Barrel;
 
+	Hazel::Ref<Hazel::Framebuffer> m_Framebuffer;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	float fps = 0.0f;
 
