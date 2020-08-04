@@ -1,27 +1,26 @@
 #include "hzpch.h"
-#include "WindowsInput.h"
+#include "Hazel/Core/Input.h"
 
-#include <GLFW/glfw3.h>
 #include "Hazel/Core/Application.h"
+#include <GLFW/glfw3.h>
+
 namespace Hazel
 {
-    Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
-
-    bool WindowsInput::IsKeyPressedImpl(KeyCode keycode)
+    bool Input::IsKeyPressed(KeyCode keycode)
     {
         auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         auto state = glfwGetKey(window, (uint16_t)keycode);
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool WindowsInput::IsMouseButtonPressedImpl(MouseCode button)
+    bool Input::IsMouseButtonPressed(MouseCode button)
     {
         auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         auto state = glfwGetMouseButton(window, (uint16_t)button);
         return state == GLFW_PRESS;
     }
 
-    std::pair<float, float> WindowsInput::GetMousePositionImpl()
+    std::pair<float, float> Input::GetMousePosition()
     {
         auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
         double xpos, ypos;
@@ -29,15 +28,15 @@ namespace Hazel
         return { (float)xpos, (float)ypos };
     }
 
-    float WindowsInput::GetMouseXImpl()
+    float Input::GetMouseX()
     {
-        auto [x, y] = GetMousePositionImpl();
+        auto [x, y] = GetMousePosition();
         return x;
     }
 
-    float WindowsInput::GetMouseYImpl()
+    float Input::GetMouseY()
     {
-        auto [x, y] = GetMousePositionImpl();
+        auto [x, y] = GetMousePosition();
         return y;
     }
 }
