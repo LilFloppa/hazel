@@ -18,8 +18,6 @@ private:
 	Hazel::OrthographicCameraController m_CameraController;
 
 	Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
-	Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
-	Hazel::Ref<Hazel::SubTexture2D> m_Stairs, m_Barrel;
 
 	float fps = 0.0f;
 

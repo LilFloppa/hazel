@@ -14,10 +14,6 @@ void Sandbox2D::OnAttach()
 	HZ_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_SpriteSheet = Hazel::Texture2D::Create("assets/textures/SpriteSheet.png");
-	m_Stairs = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 64, 64 });
-	m_Barrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 64, 64 });
-
 }
 
 void Sandbox2D::OnDetach()
@@ -55,10 +51,6 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		rotation += ts * 50.0f;
 
 		HZ_PROFILE_SCOPE("Renderer Draw");
-		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Hazel::Renderer2D::DrawQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_Stairs);
-		Hazel::Renderer2D::DrawQuad({ -2.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, m_Barrel);
-		Hazel::Renderer2D::EndScene();
 
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		for (float y = -10.0f; y < 10.0f; y += 0.5f)
